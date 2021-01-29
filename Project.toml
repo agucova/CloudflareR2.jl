@@ -1,0 +1,13 @@
+name = "Minio"
+uuid = "4281f0d9-7ae0-406e-9172-b7277c1efa20"
+authors = ["Expanding Man <savastio@protonmail.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1.5"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
