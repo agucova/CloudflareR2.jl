@@ -1,31 +1,30 @@
 module Minio
 
 using AWS, AWSS3, URIs
+using Base: Process
 
+const MINIO_EXE = Ref{String}("")
 
-struct MinioConfig{C} <: AbstractAWSConfig
-    endpoint::URI
-    region::String
-    creds::C
+# TODO set up to fetch binary as artifact during build if not already installed
+function getexe()
+    io, err = IOBuffer(), IOBuffer()
+    run(pipeline(Cmd(`which minio`, ignorestatus=true), stdout=io, stderr=err))
+    exe = chomp(String(take!(io)))
+    ispath(exe) ? exe : ""
 end
 
-function MinioConfig(endpoint::URI, region::AbstractString, creds=nothing)
-    MinioConfig{typeof(creds)}(endpoint, region, creds)
-end
-function MinioConfig(endpoint::AbstractString, region::AbstractString, creds=nothing)
-    MinioConfig(URI(endpoint), region, creds)
-end
+__init__() = (MINIO_EXE[] = getexe())
 
-AWS.region(cfg::MinioConfig) = cfg.region
-AWS.credentials(cfg::MinioConfig) = cfg.creds
 
-function AWS.generate_service_url(cfg::MinioConfig, service::AbstractString, resource::AbstractString)
-    service == "s3" || throw(ArgumentError("Minio config only supports S3 service requests; got $service"))
-    joinpath(cfg.endpoint, resource)
-end
+include("client.jl")
+include("server.jl")
+
+
+MinioConfig(s::Server; kwargs...) = MinioConfig(s.address; kwargs...)
 
 
 export MinioConfig
+export AWSCredentials
 # exports from AWSS3.jl
 export S3Path, s3_arn, s3_put, s3_get, s3_get_file, s3_exists, s3_delete, s3_copy,
        s3_create_bucket,
