@@ -1,16 +1,33 @@
 module Minio
 
-using AWS, AWSS3, URIs
+using AWS, AWSS3, URIs, Pkg.Artifacts
 using Base: Process
 
 const MINIO_EXE = Ref{String}("")
 
-# TODO set up to fetch binary as artifact during build if not already installed
+
+"""
+    getexe()
+
+Get the path of the min.io binary executable.  If minio is not already installed, this package will
+fetch it as a binary artifact during its build step.
+
+The downloaded artifact will be used by default, if available.
+
+The build step of this package will always update the binary artifact to the latest version of min.io.  This will
+be skipped only if a system min.io installation (discoverable via `which minio`) is found.
+"""
 function getexe()
-    io, err = IOBuffer(), IOBuffer()
-    run(pipeline(Cmd(`which minio`, ignorestatus=true), stdout=io, stderr=err))
-    exe = chomp(String(take!(io)))
-    ispath(exe) ? exe : ""
+    toml = joinpath(@__DIR__,"..","Artifacts.toml")
+    arthash = artifact_hash("minio", toml)
+    if isnothing(arthash)
+        io, err = IOBuffer(), IOBuffer()
+        run(pipeline(Cmd(`which minio`, ignorestatus=true), stdout=io, stderr=err))
+        exe = chomp(String(take!(io)))
+        ispath(exe) ? exe : ""
+    else
+        joinpath(artifact_path(arthash), "minio")
+    end
 end
 
 __init__() = (MINIO_EXE[] = getexe())
