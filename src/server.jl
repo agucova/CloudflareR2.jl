@@ -8,6 +8,13 @@ const DEFAULT_ADDRESS = "localhost:9000"
 A data structure for managing a min.io server process.  By default, running this will execute the min.io binary as identified
 during the initialization of the `Minio` module.
 
+The launched server will use the environment in which the Julia process was launched, so one should set environment variables
+for the server just as one would set them when running the server from the command line.
+
+Note that the `Server` object does *NOT* provide any additional functionality not already available in the min.io command
+line interface apart from convenient Julia bindings.  It was included in this package because the functionality was going
+to be needed for the sake of testing and CI/CD anyway, so it made sense to include it as user facing functionality as well.
+
 ## Constructors
 ```julia
 Server(cmd, addr::URI; detach=false)
