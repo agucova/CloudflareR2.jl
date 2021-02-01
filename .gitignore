@@ -3,3 +3,4 @@
 /docs/build/
 *.log
 test/minio
+.minio*
