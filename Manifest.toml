@@ -2,17 +2,17 @@
 
 [[AWS]]
 deps = ["Base64", "Compat", "Dates", "GitHub", "HTTP", "IniFile", "JSON", "MbedTLS", "Mocking", "OrderedCollections", "Retry", "Sockets", "UUIDs", "XMLDict"]
-git-tree-sha1 = "3b7227ed6ea73cf86468c8d6235ff0a4f8f9c9d7"
+git-tree-sha1 = "eef5d82417a24ba93fc72fa29956e0461722a6c4"
 uuid = "fbe9abb3-538b-5e4e-ba9e-bc94f4f92ebc"
-version = "1.24.0"
+version = "1.25.0"
 
 [[AWSS3]]
 deps = ["AWS", "Base64", "Dates", "EzXML", "FilePathsBase", "HTTP", "MbedTLS", "OrderedCollections", "Retry", "SymDict", "UUIDs", "XMLDict"]
-git-tree-sha1 = "8908c567ea9fdccd869279c4fd027b43dc491253"
-repo-rev = "abstractcfg"
+git-tree-sha1 = "22d4eea7eee3a2d892eeb51b89f44c66ee216a43"
+repo-rev = "master"
 repo-url = "https://github.com/ExpandingMan/AWSS3.jl"
 uuid = "1c724243-ef5b-51ab-93f4-b0a88ac62a95"
-version = "0.8.3"
+version = "0.8.2"
 
 [[ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
@@ -59,8 +59,6 @@ version = "1.1.0"
 [[FilePathsBase]]
 deps = ["Dates", "Mmap", "Printf", "Test", "UUIDs"]
 git-tree-sha1 = "d4f60ba7f2d961cd580fc91936578673c56943fd"
-repo-rev = "typefix1"
-repo-url = "https://github.com/ExpandingMan/FilePathsBase.jl"
 uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
 version = "0.9.8"
 
@@ -254,9 +252,9 @@ uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [[XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "be0db24f70aae7e2b89f2f3092e93b8606d659a6"
+git-tree-sha1 = "afd2b541e8fd425cd3b7aa55932a257035ab4a70"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.9.10+3"
+version = "2.9.11+0"
 
 [[XMLDict]]
 deps = ["EzXML", "IterTools", "OrderedCollections"]
