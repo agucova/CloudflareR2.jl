@@ -14,6 +14,8 @@ well as some simple terms for managing min.io servers.
 
     This package is unofficial. It does not link to any min.io library, but rather calls
     a separate min.io process, either through a shell or HTTP.
+    If you are a min.io maintainer and are interested in moving this package to an
+    official repository, please open an issue.
 
 ## Installation
 The package itself can be installed with
