@@ -59,6 +59,7 @@ AWS.credentials(cfg::MinioConfig) = cfg.creds
 
 function AWS.generate_service_url(cfg::MinioConfig, service::String, resource::String)
     service == "s3" || throw(ArgumentError("Minio config only supports S3 service requests; got $service"))
-    string(joinpath(cfg.endpoint, resource))
+    # NOTE: cannot use joinpath here, as it will silently truncate many resource strings
+    string(cfg.endpoint, resource)
 end
 
