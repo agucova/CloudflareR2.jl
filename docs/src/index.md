@@ -10,6 +10,11 @@ interface, so interaction with a min.io service is achieved through
 convenient constructors for a configuration allowing min.io to be used with AWSS3.jl, as
 well as some simple terms for managing min.io servers.
 
+!!! note
+
+    This package is unofficial. It does not link to any min.io library, but rather calls
+    a separate min.io process, either through a shell or HTTP.
+
 ## Installation
 The package itself can be installed with
 ```julia
