@@ -15,6 +15,8 @@ ENV["AWS_SECRET_ACCESS_KEY"] = "testpassword"
 s = Minio.Server(@__DIR__)
 run(s, wait=false)
 
+lineending = Sys.iswindows() ? "\r\n" : "\n"
+
 @testset "Minio.jl" begin
     @test process_running(s)
 
@@ -23,13 +25,13 @@ run(s, wait=false)
                       username="testuser", password="testpassword")
     path = S3Path("s3://testbucket", config=cfg)
     @test readdir(path) == ["testfile.txt"]
-    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test\n"
+    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test$(lineending)"
 
     # config from environment
     cfg = MinioConfig("http://localhost:9000")
     path = S3Path("s3://testbucket", config=cfg)
     @test readdir(path) == ["testfile.txt"]
-    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test\n"
+    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test$(lineending)"
 end
 
 kill(s)

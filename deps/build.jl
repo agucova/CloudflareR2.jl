@@ -1,6 +1,14 @@
 using Pkg.Artifacts
 #using Downloads: download  # this is for 1.6; will still work but with a warning otherwise
 
+function minio_executable_name()
+    if Sys.iswindows()
+        "minio.exe"
+    else
+        "minio"
+    end
+end
+
 function minio_download_url()
     arch = if Sys.islinux()
         "linux-amd64"
@@ -13,14 +21,15 @@ function minio_download_url()
     else
         error("what the hell operating system is this?")
     end
-    "https://dl.min.io/server/minio/release/$arch/minio"
+    exec = minio_executable_name()
+    "https://dl.min.io/server/minio/release/$arch/$exec"
 end
 
 toml = joinpath(@__DIR__,"..","Artifacts.toml")
 
 minio = artifact_hash("minio", toml)
 
-if success(`which minio`)
+if !Sys.iswindows() && success(`which minio`)
     path = readchomp(`which minio`)
     @info("existing minio binaries found at $path")
 else
@@ -31,11 +40,11 @@ else
     minio = create_artifact() do dir
         url = minio_download_url()
         @info("downloading minio binary from $url")
-        download(url, joinpath(dir,"minio"))
+        download(url, joinpath(dir,minio_executable_name()))
     end
 
     bind_artifact!(toml, "minio", minio)
-    exe = joinpath(artifact_path(minio),"minio")
+    exe = joinpath(artifact_path(minio),minio_executable_name())
     chmod(exe, 0o777)
     @info("minio binary installed at $exe")
 end
