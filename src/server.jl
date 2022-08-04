@@ -18,13 +18,15 @@ to be needed for the sake of testing and CI/CD anyway, so it made sense to inclu
 ## Constructors
 ```julia
 Server(cmd, addr::URI; detach=false)
-Server(exe, dirs; detach=false, address="localhost:9000", certs_dir="", quiet=false, anonymous=false, json=false)
 Server(dirs; detach=false, address="localhost:9000", certs_dir="", quiet=false, anonymous=false, json=false)
+Server(dirs; detach=false, address="localhost:9000", certs_dir="", quiet=false, anonymous=false, json=false)
+Server(cmd, dirs; kw...)
+Server(cmd, dir; kw...)
 ```
 
 ## Arguments
-- `cmd::AbstractVector{<:AbstractString}`: The command executed when running the server as a `Vector` of strings.
-- `exe::AbstractString`: The min.io executable to use.
+- `cmd::Cmd` the `minio` command (e.g. `minio` on a typical install).  By defualt this will use the binary provided via
+    `minio_jll`.
 - `dirs`: The directory or directories to host with the server, as they would be provided to the `minio server` command.
 - `detach::Bool`: Whether or not to run the server process detached from the Julia process. Setting this to `true` allows
     the server process to outlive the Julia process which spawned it.
@@ -50,9 +52,7 @@ mutable struct Server
     address::URI
     process::Process
 
-    function Server(cmd::AbstractVector{<:AbstractString}, addr::URI; detach::Bool=false)
-        new(Cmd(Cmd(cmd), detach=detach, env=ENV), addr)
-    end
+    Server(cmd::Cmd, addr::URI; detach::Bool=false) = new(Cmd(cmd, detach=detach, env=ENV), addr)
 end
 
 function Base.show(io::IO, s::Server)
@@ -89,23 +89,27 @@ server_uri_arg(s::Server) = server_uri_arg(s.address)
 
 Construct the command for running a min.io server as a `Vector` of strings.
 """
-function servercmd(exe::AbstractString, dirs::AbstractVector{<:AbstractString}; address::AbstractString=DEFAULT_ADDRESS,
-                   certs_dir::AbstractString="", quiet::Bool=false, anonymous::Bool=false, json::Bool=false)
-    cmd  = String[exe; "server"; "--address"; address]
-    isempty(certs_dir) || append!(cmd, ["--certs-dir", certs_dir])
-    quiet && push!(cmd, "--quiet")
-    anonymous && push!(cmd, "--anonymous")
-    json && push!(cmd, "--json")
-    append!(cmd, dirs)
+function servercmd(cmd::Cmd, dirs::AbstractVector{<:AbstractString}; address::AbstractString=DEFAULT_ADDRESS,
+                   certs_dir::AbstractString="", quiet::Bool=false, anonymous::Bool=false, json::Bool=false,
+                   console_port::Integer=44035,
+                  )
+    cmd = `$cmd server --address $address --console-address ":$console_port"`
+    isempty(certs_dir) || (cmd = `$cmd --certs-dir $certs_dir`)
+    quiet && (cmd = `$cmd --quiet`)
+    anonymous && (cmd = `$cmd --anonymous`)
+    json && (cmd = `$cmd --json`)
+    isempty(dirs) || (cmd = `$cmd $dirs`)
     cmd
 end
+servercmd(dirs::AbstractVector{<:AbstractString}; kw...) = servercmd(minio(); kw...)
 
-function Server(exe::AbstractString, dirs::AbstractVector{<:AbstractString}; address::AbstractString=DEFAULT_ADDRESS,
-                detach::Bool=false, kwargs...)
-    Server(servercmd(exe, dirs; address, kwargs...), server_uri(address); detach)
+function Server(cmd::Cmd, dirs::AbstractVector{<:AbstractString}; address::AbstractString=DEFAULT_ADDRESS,
+                detach::Bool=false, kw...)
+    Server(servercmd(cmd, dirs; address, kw...), server_uri(address); detach)
 end
-Server(dirs::AbstractVector{<:AbstractString}; kwargs...) = Server(MINIO_EXE[], dirs; kwargs...)
-Server(dir::AbstractString; kwargs...) = Server([dir]; kwargs...)
+Server(cmd::Cmd, dir::AbstractString; kw...) = Server(cmd, [dir]; kw...)
+Server(dirs::AbstractVector{<:AbstractString}; kw...) = Server(minio(), dirs; kw...)
+Server(dir::AbstractString; kw...) = Server(minio(), dir; kw...)
 
 function Base.run(s::Server; wait::Bool=true)
     s.process = run(s.cmd; wait)
