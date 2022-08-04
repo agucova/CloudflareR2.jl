@@ -4,47 +4,24 @@
   # only:
   #   - master
   #   - development
-  # TODO temporary work around of Pkg server issue
-  variables:
-    JULIA_PKG_SERVER: ""  
   script:
-    # Let's run the tests. Substitute `coverage = false` below, if you do not
-    # want coverage results.
     - julia -e 'using Pkg; Pkg.add(path="."); Pkg.build("Minio"); Pkg.test("Minio"; coverage = true)'
-    # Comment out below if you do not want coverage results.
     - julia -e 'using Pkg; Pkg.add("Coverage");
       import Minio; cd(joinpath(dirname(pathof(Minio)), ".."));
       using Coverage; cl, tl = get_summary(process_folder());
       println("(", cl/tl*100, "%) covered")'
 
-# Name a test and select an appropriate image.
-# images comes from Docker hub
-test:1.6:
+test:1.6:  # LTS test
   image: julia:1.6
   <<: *test_definition
 
-# Maybe you would like to test your package against the development branch:
-# test:1.1-dev (not sure there is such an image in docker, so not tested yet):
-#  image: julia:v1.1-dev
-#  # ... allowing for failures, since we are testing against the development
-#  # branch:
-#  allow_failure: true
-#  <<: *test_definition
+test:  # latest test
+  image: julia
+  <<: *test_definition
 
-# REMARK: Do not forget to enable the coverage feature for your project, if you
-# are using code coverage reporting above. This can be done by
-#
-# - Navigating to the `CI/CD Pipelines` settings of your project,
-# - Copying and pasting the default `Simplecov` regex example provided, i.e.,
-#   `\(\d+.\d+\%\) covered` in the `test coverage parsing` textfield.
-
-# Example documentation deployment
 pages:
   image: julia
   stage: deploy
-  # TODO temporary work around of Pkg server issue
-  variables:
-    JULIA_PKG_SERVER: ""
   script:
     - apt-get update -qq && apt-get install -y git  # needed by Documenter
     - julia -e 'using Pkg; Pkg.add(path="."); Pkg.build("Minio");'  # rebuild Julia (can be put somewhere else I'm sure
