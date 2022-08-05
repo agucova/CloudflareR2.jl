@@ -91,7 +91,7 @@ Construct the command for running a min.io server as a `Vector` of strings.
 """
 function servercmd(cmd::Cmd, dirs::AbstractVector{<:AbstractString}; address::AbstractString=DEFAULT_ADDRESS,
                    certs_dir::AbstractString="", quiet::Bool=false, anonymous::Bool=false, json::Bool=false,
-                   console_port::Integer=44035,
+                   console_port::Integer=9090,
                   )
     cmd = `$cmd server --address $address --console-address ":$console_port"`
     isempty(certs_dir) || (cmd = `$cmd --certs-dir $certs_dir`)

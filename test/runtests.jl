@@ -11,11 +11,11 @@ ENV["MINIO_SECRET_KEY"] = "testpassword"
 ENV["AWS_ACCESS_KEY_ID"] = "testuser"
 ENV["AWS_SECRET_ACCESS_KEY"] = "testpassword"
 
+# for some reason minio freaks out if you give it an absolute path it doesn't like
+tmp = mktempdir(".")
 
-s = Minio.Server(@__DIR__)
+s = Minio.Server(tmp)
 run(s, wait=false)
-
-lineending = Sys.iswindows() ? "\r\n" : "\n"
 
 @testset "Minio.jl" begin
     @test process_running(s)
@@ -23,15 +23,33 @@ lineending = Sys.iswindows() ? "\r\n" : "\n"
     # with explicit config
     cfg = MinioConfig("http://localhost:9000",
                       username="testuser", password="testpassword")
-    path = S3Path("s3://testbucket", config=cfg)
-    @test readdir(path) == ["testfile.txt"]
-    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test$(lineending)"
+
+    s3_create_bucket(cfg, "testbucket")
+
+    buck = S3Path("s3://testbucket/", config=cfg)
+    path = joinpath(buck, "testfile.txt")
+
+    teststr = "this is a test\n"
+
+    write(path, teststr)
+
+    @test readdir(buck) == ["testfile.txt"]
+    @test String(read(path)) == teststr
 
     # config from environment
     cfg = MinioConfig("http://localhost:9000")
-    path = S3Path("s3://testbucket", config=cfg)
-    @test readdir(path) == ["testfile.txt"]
-    @test String(read(joinpath(path, "testfile.txt"))) == "this is a test$(lineending)"
+    buck = S3Path("s3://testbucket/", config=cfg)
+    path = joinpath(buck, "testfile.txt")
+    @test readdir(buck) == ["testfile.txt"]
+    @test String(read(path)) == teststr
+
+    rm(path, recursive=true, force=true)
+
+    @test readdir(buck) == []
 end
 
-kill(s)
+try
+    kill(s)
+finally
+    isdir(tmp) && rm(tmp, recursive=true, force=true)
+end
