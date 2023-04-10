@@ -83,11 +83,25 @@ function R2Config(account_id::AbstractString, creds::AWSCredentials; region::Abs
 end
 
 function get_access_key_id()::AbstractString
-    return @something get(ENV, "R2_ACCESS_KEY_ID", nothing) get(ENV, "AWS_ACCESS_KEY_ID", nothing) error("No access key ID found.")
+    access_key = get(ENV, "R2_ACCESS_KEY_ID", nothing)
+    if access_key === nothing
+        access_key = get(ENV, "AWS_ACCESS_KEY_ID", nothing)
+    end
+    if access_key === nothing
+        throw(ArgumentError("No access key ID found."))
+    end
+    access_key
 end
 
 function get_secret_access_key()
-    return @something get(ENV, "R2_SECRET_ACCESS_KEY", nothing) get(ENV, "AWS_SECRET_ACCESS_KEY", nothing) error("No secret access key found.")
+    secret_access_key = get(ENV, "R2_SECRET_ACCESS_KEY", nothing)
+    if secret_access_key === nothing
+        secret_access_key = get(ENV, "AWS_SECRET_ACCESS_KEY", nothing)
+    end
+    if secret_access_key === nothing
+        throw(ArgumentError("No secret access key found."))
+    end
+    secret_access_key
 end
 
 function R2Config(
