@@ -1,40 +1,31 @@
 using R2
 using Test
+using URIs
 
 # NOTE: the vast majority of min.io functionality is in AWSS3, which is why these tests are so minimal
 
 # these should be picked up by R2Config
-ENV["AWS_ACCESS_KEY_ID"] = "testuser"
-ENV["AWS_SECRET_ACCESS_KEY"] = "testpassword"
-
-# for some reason minio freaks out if you give it an absolute path it doesn't like
-tmp = mktempdir(".")
+ENV["R2_ACCESS_KEY_ID"] = "testuser"
+ENV["R2_SECRET_ACCESS_KEY"] = "testpassword"
 
 @testset "R2.jl" begin
-    # with explicit config
-    cfg = R2Config("http://localhost:9000",
-                      username="testuser", password="testpassword")
+    cfg = R2Config("ACCOUNTID")
+    @test cfg.region == "auto"
+    @test cfg.endpoint == URI("https://ACCOUNTID.r2.cloudflarestorage.com")
 
-    s3_create_bucket(cfg, "testbucket")
+    # Test invalid account id
+    @test_throws ArgumentError R2Config("non_alpha")
 
-    buck = S3Path("s3://testbucket/", config=cfg)
-    path = joinpath(buck, "testfile.txt")
+    # Custom endpoint
+    cfg = R2Config(URI("http://localhost:9000"))
+    @test cfg.region == "auto"
 
-    teststr = "this is a test\n"
+    # With credentials
+    cfg = R2Config(URI("http://localhost:9000"),
+                       access_key_id="test", secret_access_key="test")
+    @test cfg.region == "auto"
+    @test cfg.endpoint == URI("http://localhost:9000")
 
-    write(path, teststr)
-
-    @test readdir(buck) == ["testfile.txt"]
-    @test String(read(path)) == teststr
-
-    # config from environment
-    cfg = R2Config("http://localhost:9000")
-    buck = S3Path("s3://testbucket/", config=cfg)
-    path = joinpath(buck, "testfile.txt")
-    @test readdir(buck) == ["testfile.txt"]
-    @test String(read(path)) == teststr
-
-    rm(path, recursive=true, force=true)
-
-    @test readdir(buck) == []
+    # Test invalid region
+    @test_throws ArgumentError R2Config(URI("http://localhost:9000"), cfg.creds; region="invalid")
 end
