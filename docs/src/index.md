@@ -1,8 +1,8 @@
 ```@meta
-CurrentModule = R2
+CurrentModule = CloudflareR2
 ```
 
-# R2
+# CloudflareR2
 !!! note
 
     This package is a fork from [Minio.jl](https://gitlab.com/ExpandingMan/Minio.jl).
@@ -17,13 +17,13 @@ convenient constructors to set up the configuration to be used with AWSS3.jl.
 The package itself can be installed with
 
 ```julia
-Pkg.add("R2")
+Pkg.add("CloudflareR2")
 ```
-or `]add R2` in the REPL.
+or `]add CloudflareR2` in the REPL.
 
 ## Client
 This package provides a `AbstractAWSConfig` object to be used with Cloudflare R2. This allows seamless integration with the AWSS3.jl package.
 
 ```@docs
-R2.R2Config
+CloudflareR2.R2Config
 ```

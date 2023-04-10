@@ -1,7 +1,7 @@
-name = "R2"
+name = "CloudflareR2"
 uuid = "7a9847aa-5741-445f-924a-8fbee339cc15"
 authors = ["Agustín Covarrubias", "Expanding Man <savastio@protonmail.com> and contributors"]
-version = "1.0.0"
+version = "1.0.1"
 
 [deps]
 AWS = "fbe9abb3-538b-5e4e-ba9e-bc94f4f92ebc"

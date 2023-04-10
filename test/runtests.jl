@@ -1,4 +1,4 @@
-using R2
+using CloudflareR2
 using Test
 using URIs
 
@@ -8,7 +8,7 @@ using URIs
 ENV["R2_ACCESS_KEY_ID"] = "testuser"
 ENV["R2_SECRET_ACCESS_KEY"] = "testpassword"
 
-@testset "R2.jl" begin
+@testset "CloudflareR2.jl" begin
     cfg = R2Config("ACCOUNTID")
     @test cfg.region == "auto"
     @test cfg.endpoint == URI("https://ACCOUNTID.r2.cloudflarestorage.com")

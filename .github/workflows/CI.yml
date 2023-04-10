@@ -52,6 +52,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using R2
-            DocMeta.setdocmeta!(R2, :DocTestSetup, :(using R2); recursive=true)
-            doctest(R2)'
+            using CloudflareR2
+            DocMeta.setdocmeta!(CloudflareR2, :DocTestSetup, :(using CloudflareR2); recursive=true)
+            doctest(CloudflareR2)'

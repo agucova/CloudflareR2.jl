@@ -1,13 +1,13 @@
-using R2
+using CloudflareR2
 using Documenter
 
-DocMeta.setdocmeta!(R2, :DocTestSetup, :(using R2); recursive=true)
+DocMeta.setdocmeta!(CloudflareR2, :DocTestSetup, :(using CloudflareR2); recursive=true)
 
 makedocs(;
-    modules=[R2],
+    modules=[CloudflareR2],
     authors="Agustín Covarrubias",
     repo="https://github.com/agucova/R2.jl/blob/{commit}{path}#{line}",
-    sitename="R2.jl",
+    sitename="CloudflareR2.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://agucova.github.io/R2.jl",

@@ -1,4 +1,4 @@
-module R2
+module CloudflareR2
 
 using AWS, AWSS3, URIs
 
