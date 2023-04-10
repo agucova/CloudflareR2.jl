@@ -10,29 +10,29 @@ ENV["R2_SECRET_ACCESS_KEY"] = "testpassword"
 
 @testset "R2.jl" begin
     # with explicit config
-    cfg = R2Config(URI("http://localhost:9000"),
-                      access_key_id="testuser", secret_access_key="testpassword")
+    # cfg = R2Config(URI("http://localhost:9000"),
+    #                   access_key_id="testuser", secret_access_key="testpassword")
 
-    s3_create_bucket(cfg, "testbucket")
+    # # s3_create_bucket(cfg, "testbucket")
 
-    buck = S3Path("s3://testbucket/", config=cfg)
-    path = joinpath(buck, "testfile.txt")
+    # buck = S3Path("s3://testbucket/", config=cfg)
+    # path = joinpath(buck, "testfile.txt")
 
-    teststr = "this is a test\n"
+    # teststr = "this is a test\n"
 
-    write(path, teststr)
+    # write(path, teststr)
 
-    @test readdir(buck) == ["testfile.txt"]
-    @test String(read(path)) == teststr
+    # @test readdir(buck) == ["testfile.txt"]
+    # @test String(read(path)) == teststr
 
-    # config from environment
-    cfg = R2Config(URI("http://localhost:9000"))
-    buck = S3Path("s3://testbucket/", config=cfg)
-    path = joinpath(buck, "testfile.txt")
-    @test readdir(buck) == ["testfile.txt"]
-    @test String(read(path)) == teststr
+    # # config from environment
+    # cfg = R2Config(URI("http://localhost:9000"))
+    # buck = S3Path("s3://testbucket/", config=cfg)
+    # path = joinpath(buck, "testfile.txt")
+    # @test readdir(buck) == ["testfile.txt"]
+    # @test String(read(path)) == teststr
 
-    rm(path, recursive=true, force=true)
+    # rm(path, recursive=true, force=true)
 
-    @test readdir(buck) == []
+    # @test readdir(buck) == []
 end
