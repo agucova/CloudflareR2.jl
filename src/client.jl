@@ -23,7 +23,7 @@ R2Config(endpoint; region="", username, password, token="", user_arn="")
 
 ## Examples
 ```julia
-using Minio
+using R2
 
 cfg = R2Config("http://localhost:9000")
 
@@ -58,7 +58,7 @@ AWS.region(cfg::R2Config) = cfg.region
 AWS.credentials(cfg::R2Config) = cfg.creds
 
 function AWS.generate_service_url(cfg::R2Config, service::String, resource::String)
-    service == "s3" || throw(ArgumentError("Minio config only supports S3 service requests; got $service"))
+    service == "s3" || throw(ArgumentError("An R2 config only supports S3 service requests; got $service"))
     # NOTE: cannot use joinpath here, as it will silently truncate many resource strings
     string(cfg.endpoint, resource)
 end

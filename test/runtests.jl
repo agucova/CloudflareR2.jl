@@ -7,9 +7,6 @@ using Test
 ENV["AWS_ACCESS_KEY_ID"] = "testuser"
 ENV["AWS_SECRET_ACCESS_KEY"] = "testpassword"
 
-# for some reason minio freaks out if you give it an absolute path it doesn't like
-tmp = mktempdir(".")
-
 @testset "R2.jl" begin
     # with explicit config
     cfg = R2Config("http://localhost:9000",
