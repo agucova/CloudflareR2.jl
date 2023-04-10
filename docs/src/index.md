@@ -23,5 +23,5 @@ or `]add R2` in the REPL.
 This package provides a `AbstractAWSConfig` object appropraite for use with a min.io
 service.
 ```@docs
-R2.R2
+R2.R2Config
 ```
