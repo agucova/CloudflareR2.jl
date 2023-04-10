@@ -1,14 +1,12 @@
 module R2
 
 using AWS, AWSS3, URIs
-using Base: Process
-
 
 include("client.jl")
 
-
 export R2Config
 export AWSCredentials
+
 # exports from AWSS3.jl
 export S3Path, s3_arn, s3_put, s3_get, s3_get_file, s3_exists, s3_delete, s3_copy,
        s3_create_bucket,
@@ -19,5 +17,4 @@ export S3Path, s3_arn, s3_put, s3_get, s3_get_file, s3_exists, s3_delete, s3_cop
        s3_sign_url, s3_begin_multipart_upload, s3_upload_part,
        s3_complete_multipart_upload, s3_multipart_upload,
        s3_get_tags, s3_put_tags, s3_delete_tags
-
 end
