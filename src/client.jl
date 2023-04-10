@@ -1,13 +1,13 @@
 
 """
-    MinioConfig
+    R2Config
 
 A configuration object allowing the AWS S3 interface from AWS.jl and AWSS3.jl for min.io.
 
 ## Constructors
 ```julia
-MinioConfig(endpoint, creds; region="")
-MinioConfig(endpoint; region="", username, password, token="", user_arn="")
+R2Config(endpoint, creds; region="")
+R2Config(endpoint; region="", username, password, token="", user_arn="")
 ```
 
 ## Arguments
@@ -25,7 +25,7 @@ MinioConfig(endpoint; region="", username, password, token="", user_arn="")
 ```julia
 using Minio
 
-cfg = MinioConfig("http://localhost:9000")
+cfg = R2Config("http://localhost:9000")
 
 # using the AWS S3 API
 s3_list_buckets(cfg)
@@ -35,29 +35,29 @@ path = S3Path("s3://bucket-name", config=cfg)
 readdir(path)
 ```
 """
-struct MinioConfig <: AbstractAWSConfig
+struct R2Config <: AbstractAWSConfig
     endpoint::URI
     region::String
     creds::AWSCredentials
 end
 
-function MinioConfig(endpoint::URI, creds::AWSCredentials; region::AbstractString="")
-    MinioConfig(endpoint, region, creds)
+function R2Config(endpoint::URI, creds::AWSCredentials; region::AbstractString="")
+    R2Config(endpoint, region, creds)
 end
-function MinioConfig(endpoint::AbstractString, creds::AWSCredentials; region::AbstractString="")
-    MinioConfig(URI(endpoint), creds; region)
+function R2Config(endpoint::AbstractString, creds::AWSCredentials; region::AbstractString="")
+    R2Config(URI(endpoint), creds; region)
 end
-function MinioConfig(endpoint::Union{URI,AbstractString}; region::AbstractString="",
+function R2Config(endpoint::Union{URI,AbstractString}; region::AbstractString="",
                      username::AbstractString=get(ENV, "AWS_ACCESS_KEY_ID", "minioadmin"),
                      password::AbstractString=get(ENV, "AWS_SECRET_ACCESS_KEY", "minioadmin"),
                      token::AbstractString="", user_arn::AbstractString="")
-    MinioConfig(endpoint, AWSCredentials(username, password, token, user_arn); region)
+    R2Config(endpoint, AWSCredentials(username, password, token, user_arn); region)
 end
 
-AWS.region(cfg::MinioConfig) = cfg.region
-AWS.credentials(cfg::MinioConfig) = cfg.creds
+AWS.region(cfg::R2Config) = cfg.region
+AWS.credentials(cfg::R2Config) = cfg.creds
 
-function AWS.generate_service_url(cfg::MinioConfig, service::String, resource::String)
+function AWS.generate_service_url(cfg::R2Config, service::String, resource::String)
     service == "s3" || throw(ArgumentError("Minio config only supports S3 service requests; got $service"))
     # NOTE: cannot use joinpath here, as it will silently truncate many resource strings
     string(cfg.endpoint, resource)

@@ -7,7 +7,7 @@ using Base: Process
 include("client.jl")
 
 
-export MinioConfig
+export R2Config
 export AWSCredentials
 # exports from AWSS3.jl
 export S3Path, s3_arn, s3_put, s3_get, s3_get_file, s3_exists, s3_delete, s3_copy,
