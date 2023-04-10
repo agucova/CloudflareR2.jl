@@ -75,8 +75,8 @@ end
 
 function R2Config(account_id::AbstractString, creds::AWSCredentials; region::AbstractString="auto")
     if !isalnum(account_id)
-        throw(ArgumentError("account_id must be alphanumeric. \
-        If you want to pass the endpoint directly, pass a URI object instead."))
+        throw(ArgumentError("account_id must be alphanumeric." *
+                            "If you want to pass the endpoint directly, pass a URI object instead."))
     end
     endpoint = URI("https://$(account_id).r2.cloudflarestorage.com")
     R2Config(URI(endpoint), creds; region=region)
