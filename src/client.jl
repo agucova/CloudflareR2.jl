@@ -44,7 +44,6 @@ path = S3Path("s3://bucket-name", config=config)
 readdir(path)
 ```
 """
-
 struct R2Config <: AbstractAWSConfig
     endpoint::URI
     region::String
