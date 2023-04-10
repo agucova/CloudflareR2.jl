@@ -1,41 +1,27 @@
 ```@meta
-CurrentModule = Minio
+CurrentModule = R2
 ```
 
-# Minio
-This package provides Julia tools for working with the [min.io](https://min.io) data
-storage program.  Min.io is an open source tool fully compatible with the AWS S3
-interface, so interaction with a min.io service is achieved through
+# R2
+> **Note**
+> This package is a fork from [Minio.jl](https://gitlab.com/ExpandingMan/Minio.jl).
+> This is also not an official Cloudflare package.
+
+This package provides Julia tools for working with [Cloudflare R2](https://www.cloudflare.com/products/r2/).  Cloudflare R2 is fully compatible with the AWS S3
+interface, so interaction with R2 is achieved through
 [AWSS3.jl](https://github.com/JuliaCloud/AWSS3.jl).  This package simply contains some
-convenient constructors for a configuration allowing min.io to be used with AWSS3.jl, as
-well as some simple terms for managing min.io servers.
-
-!!! note
-
-    This package is unofficial. It does not link to any min.io library, but rather calls
-    a separate min.io process, either through a shell or HTTP.
-    If you are a min.io maintainer and are interested in moving this package to an
-    official repository, please open an issue.
+convenient constructors to set up the configuration to be used with AWSS3.jl.
 
 ## Installation
 The package itself can be installed with
 ```julia
-Pkg.add("Minio")
+Pkg.add("R2")
 ```
-or `]add Minio` in the REPL.
-
-Minio.jl uses [`minio_jll`](https://github.com/JuliaBinaryWrappers/minio_jll.jl) to provide the
-minio binary.
+or `]add R2` in the REPL.
 
 ## Client
 This package provides a `AbstractAWSConfig` object appropraite for use with a min.io
 service.
 ```@docs
-Minio.MinioConfig
-```
-
-## Server
-This package provides some convenient tools for managing a min.io server from Julia.
-```@docs
-Minio.Server
+R2.R2
 ```

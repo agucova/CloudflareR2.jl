@@ -1,19 +1,25 @@
-using Minio
+using R2
 using Documenter
 
-DocMeta.setdocmeta!(Minio, :DocTestSetup, :(using Minio); recursive=true)
+DocMeta.setdocmeta!(R2, :DocTestSetup, :(using R2); recursive=true)
 
 makedocs(;
-    modules=[Minio],
-    authors="Expanding Man <savastio@protonmail.com> and contributors",
-    repo="https://gitlab.com/ExpandingMan/Minio.jl/blob/{commit}{path}#{line}",
-    sitename="Minio.jl",
+    modules=[R2],
+    authors="Agustín Covarrubias",
+    repo="https://github.com/agucova/R2.jl/blob/{commit}{path}#{line}",
+    sitename="R2.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://ExpandingMan.gitlab.io/Minio.jl",
+        canonical="https://agucova.github.io/R2.jl",
+        edit_link="main",
         assets=String[],
     ),
     pages=[
         "Home" => "index.md",
     ],
+)
+
+deploydocs(;
+    repo="github.com/agucova/R2.jl",
+    devbranch="main",
 )

@@ -1,15 +1,10 @@
-module Minio
+module R2
 
 using AWS, AWSS3, URIs
-using minio_jll
 using Base: Process
 
 
 include("client.jl")
-include("server.jl")
-
-
-MinioConfig(s::Server; kwargs...) = MinioConfig(s.address; kwargs...)
 
 
 export MinioConfig

@@ -2,5 +2,3 @@
 /Artifacts.toml
 /docs/build/
 *.log
-test/minio
-.minio*
