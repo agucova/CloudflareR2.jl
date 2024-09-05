@@ -11,4 +11,4 @@ using the Julia [AWS S3](https://github.com/JuliaCloud/AWSS3.jl) package.
 > This package is a fork from [Minio.jl](https://gitlab.com/ExpandingMan/Minio.jl).
 > This is also not an official Cloudflare package.
 
-You can see the documentation [here](https://agucova.github.io/CloudflareR2.jl/stable).
+You can see the documentation [here](https://agucova.github.io/CloudflareR2.jl/).
